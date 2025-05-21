@@ -10,3 +10,10 @@ Sedangkan pada ketika terdapat penambahan kode `println!("Madeline's Komputer: h
 
 ![alt text](img/image-2.png)
 
+
+## Multiple Spawn and Removing Drop 
+Saya mencoba untuk mereplikasi fungsi `async` menjadi bertotalan tiga fungsi. Jika kita lihat pada gambar di bawah, output "done", "done2", dan "done3" muncul dengan tidak berurutan. Hal ini terjadi karena eksekusi ketiga task `async` tersebut berjalan secara concurrent. Ketiga fungsi ini ditangani oleh `executor` secara independen satu sama lain, dan masing-masing menunggu selama 2 detik menggunakan `TimerFuture`.
+![alt text](img/image-3.png)
+
+Selanjutnya, ketika saya menghapus atau komen bagian potongan kode `drop(spawner);`, maka ketika program dijalankan, program akan berjalan terus tanpa henti karena `executor` tidak tahu bahwa tidak akan ada lagi task baru yang akan dikirim. Oleh karena itu, penting untuk mendeklarasikan `drop(spawner);` agar `executor` tahu kapan harus selesai mengeksekusi suatu program. 
+![alt text](img/image-4.png)
